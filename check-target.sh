@@ -147,11 +147,11 @@ check_partition_type ()
     elif [ $(fdisk -l "$partition_disk" | grep "$1[ \t]" | grep "[ \t]85[ \t]" | wc -l) -eq 1 ]; then
         error "partition "$1" is an Extended partition."
     elif [ "$2" == "83" ]; then
-      if [ $(fdisk -l "$partition_disk" | grep "$1[ \t]" | grep "[ \t]"$2"[ \t]" | wc -l) -eq 0 ]; then
+      if [ $(LC_ALL=C fdisk -l "$partition_disk" | grep "$1[ \t]" | grep -i "[ \t]"$2"[ \t]\|[ \t]Linux filesystem" | wc -l) -eq 0 ]; then
         error "partition "$1" must be type "$2" - Linux."
       fi
     else
-      if [ $(fdisk -l "$partition_disk" | grep "$1[ \t]" | grep "[ \t]"$2"[ \t]" | wc -l) -eq 0 ]; then
+      if [ $(LC_ALL=C fdisk -l "$partition_disk" | grep "$1[ \t]" | grep -i "[ \t]"$2"[ \t]\|[ \t]Linux Swap" | wc -l) -eq 0 ]; then
         error "partition "$1" must be type "$2" - Linux swap."
       fi
     fi
